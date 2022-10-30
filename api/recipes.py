@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 
 recipes_router = APIRouter()
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="templates") 
 
 @recipes_router.get("/", response_class=HTMLResponse)
 async def hello(request: Request):

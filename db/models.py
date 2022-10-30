@@ -12,7 +12,7 @@ class User(Base):
 
     resipes = relationship("Recipe", back_populates="author")
 
-class Recipe(Base):
+class Recipe(Base): 
     __tablename__ = "user_recipes"
 
     id = Column(Integer, primary_key=True)

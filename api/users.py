@@ -4,4 +4,4 @@ users_router = APIRouter()
 
 @users_router.get("/")
 async def index():
-    return {"hello": "users"}
+    return {"hello": "users"} 
