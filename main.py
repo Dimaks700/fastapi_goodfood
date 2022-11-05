@@ -1,16 +1,11 @@
-import imp
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from api import users, recipes
 from db.database import engine
-#from db.models import User, Recipe
 from db import models
 
 models.Base.metadata.create_all(bind=engine)
-
-#User.Base.metadata.create_all(bind=engine)
-#Recipe.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="FastAPI GoodFood",

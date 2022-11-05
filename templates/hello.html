@@ -2,5 +2,8 @@
 {% block content %}
     <p>
       Welcome to my awesome homepage.
+      {% for item in recipes %}
+      <li>{{item.title}} - {{item.description}}</li>
+      {% endfor %}
     </p>
 {% endblock %}
