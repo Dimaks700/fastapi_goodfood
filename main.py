@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-
 from api import users, recipes
 from db.database import engine
 from db import models

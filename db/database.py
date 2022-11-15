@@ -3,15 +3,15 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-ASYNC_SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:6263224@localhost/db_goodfood"
+ASYNC_SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg:///./db_goodfood"
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}, future=True
+    SQLALCHEMY_DATABASE_URL, connect_args={}, future=True
 )
-async_engine = create_async_engine(
-    ASYNC_SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+
+async_engine = create_async_engine(ASYNC_SQLALCHEMY_DATABASE_URL)
+
 SessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine, future=True
 )

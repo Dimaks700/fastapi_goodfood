@@ -9,6 +9,7 @@ class User(Base):
     name = Column(String(30), nullable=False)
     fullname = Column(String(30), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
+    hashed_password = Column(Integer, nullable=False)
 
     resipes = relationship("Recipe", back_populates="author")
 

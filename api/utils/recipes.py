@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from db.models import Recipe
 from pydantic_schemas.recipe import RecipeCreate
 
