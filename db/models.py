@@ -5,11 +5,11 @@ from sqlalchemy.orm import relationship
 class User(Base):
     __tablename__ = "user_account"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String(30), nullable=False)
     fullname = Column(String(30), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
-    hashed_password = Column(Integer, nullable=False)
+    hashed_password = Column(String, nullable=False)
 
     resipes = relationship("Recipe", back_populates="author")
 

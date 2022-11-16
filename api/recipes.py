@@ -5,18 +5,22 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic_schemas.recipe import RecipeCreate
+from pydantic_schemas.user import User
 from sqlalchemy.orm import Session
-from api.users import get_current_user
+from api.oauth2 import get_current_user
 
 recipes_router = APIRouter()
 
 templates = Jinja2Templates(directory="templates") 
 
 @recipes_router.get("/", response_class=HTMLResponse)
-async def hello(request: Request, db: Session = Depends(get_db), token: str = Depends(get_current_user)):
+async def hello(
+    request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+    ):
     recipes = get_recipes(db=db)
+    response = {"request": request, "recipes": recipes}
     return templates.TemplateResponse(
-        "hello.html", {"request": request, "recipes": recipes, "token": token}
+        "hello.html", response
     )
 
 @recipes_router.post("/recipes", response_model=RecipeCreate)
