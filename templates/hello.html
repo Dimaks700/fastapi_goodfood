@@ -3,7 +3,7 @@
     <p>
       Welcome to my awesome homepage.
       {% for item in recipes %}
-      <li>{{item.title}} - {{item.description}}</li>
+      <li> <a href="{{ '/%s'%item.id }}">{{item.title}} - {{item.description}}</a></li>
       {% endfor %}
     </p>
 {% endblock %}

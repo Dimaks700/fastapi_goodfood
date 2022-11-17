@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:6263224@localhost/db_goodfood"
-ASYNC_SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg:///./db_goodfood"
+ASYNC_SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:6263224@localhost/db_goodfood"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={}, future=True

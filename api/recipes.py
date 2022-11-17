@@ -1,12 +1,15 @@
-from api.utils.recipes import create_recipe, get_recipes
+import os
+from api.utils.recipes import create_ingredients_pdf, create_recipe, get_recipe, get_recipes
 from db.database import get_db
-from db.models import Recipe
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic_schemas.recipe import RecipeCreate
 from pydantic_schemas.user import User
 from sqlalchemy.orm import Session
+from fastapi.responses import FileResponse
+from starlette.background import BackgroundTasks
+
 from api.oauth2 import get_current_user
 
 recipes_router = APIRouter()
@@ -14,9 +17,7 @@ recipes_router = APIRouter()
 templates = Jinja2Templates(directory="templates") 
 
 @recipes_router.get("/", response_class=HTMLResponse)
-async def hello(
-    request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
-    ):
+async def hello(request: Request, db: Session = Depends(get_db)):
     recipes = get_recipes(db=db)
     response = {"request": request, "recipes": recipes}
     return templates.TemplateResponse(
@@ -25,6 +26,21 @@ async def hello(
 
 @recipes_router.post("/recipes", response_model=RecipeCreate)
 async def create_new_recipe(
-    recipe: RecipeCreate, db: Session = Depends(get_db)
+    recipe: RecipeCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
 ):
     return create_recipe(db=db, recipe=recipe)
+
+@recipes_router.get("/{recipe_id}")
+async def read_recipe(recipe_id, request: Request, db: Session = Depends(get_db)):
+    recipe = get_recipe(db=db, recipe_id=recipe_id)
+    context  = {"request": request, "recipe": recipe}
+    return templates.TemplateResponse(
+        "recipe_detail.html", context
+    )
+
+@recipes_router.get("/{recipe_id}/download")
+async def download_ingredients(
+    recipe_id, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
+    ):
+    background_tasks.add_task(os.unlink, f"static/{recipe_id}.pdf")
+    return FileResponse(create_ingredients_pdf(db, recipe_id))

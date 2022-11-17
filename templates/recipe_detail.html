@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>
+      <h3>{{recipe.title}}</h3> 
+    </p>
+    {{recipe.description}}
+    
+    {% if recipe.ingredients %}
+        <h5>ИНГРЕДИЕНТЫ</h5> 
+        {% for item in recipe.ingredients %}
+            <li> 
+                {{item.title}}
+            </li>
+        {% endfor %}
+        <p><a href="{{'/%s' %recipe.id }}/download" target="_blank">Скачать ингредиенты</a></p>
+    {% endif %}
+    
+    <p><a href="/">Вернуться</a></p>
+
+{% endblock %}
