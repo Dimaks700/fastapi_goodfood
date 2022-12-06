@@ -2,6 +2,9 @@ fastapi
 uvicorn
 sqlalchemy
 passlib
+jinja2
+asyncpg
+psycopg2
 bcrypt
 python-jose
 python-multipart

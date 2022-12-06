@@ -1,10 +1,10 @@
 import os
-from api.utils.recipes import create_ingredients_pdf, create_recipe, get_recipe, get_recipes
+from api.utils.recipes import create_ingredients_pdf, create_recipe, get_recipe, get_recipes, get_resipes_by_ingredient
 from db.database import get_db
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pydantic_schemas.recipe import RecipeCreate
+from pydantic_schemas.recipe import RecipeCreate, Ingredients
 from pydantic_schemas.user import User
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
@@ -26,9 +26,9 @@ async def hello(request: Request, db: Session = Depends(get_db)):
 
 @recipes_router.post("/recipes", response_model=RecipeCreate)
 async def create_new_recipe(
-    recipe: RecipeCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+    recipe: RecipeCreate, ingrediens: Ingredients, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
 ):
-    return create_recipe(db=db, recipe=recipe)
+    return create_recipe(db=db, recipe=recipe, ingrediens=ingrediens)
 
 @recipes_router.get("/{recipe_id}")
 async def read_recipe(recipe_id, request: Request, db: Session = Depends(get_db)):
@@ -44,3 +44,7 @@ async def download_ingredients(
     ):
     background_tasks.add_task(os.unlink, f"static/{recipe_id}.pdf")
     return FileResponse(create_ingredients_pdf(db, recipe_id))
+
+@recipes_router.get("/ingredient/recipes_by")
+async def recipes_by_ingredient(ingredient: str, db: Session = Depends(get_db)):
+    return get_resipes_by_ingredient(db=db, ingredient=ingredient)

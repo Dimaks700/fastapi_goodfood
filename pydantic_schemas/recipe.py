@@ -11,3 +11,6 @@ class RecipeCreate(RecipeBase):
 
 class Recipe(RecipeBase):
     id: int
+
+class Ingredients(BaseModel):
+    ingredient_list: list[str] = []

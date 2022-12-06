@@ -30,9 +30,15 @@ class Recipe(Base):
     author = relationship("User", back_populates="resipes")
     ingredients = relationship("Ingredient", secondary="recipe_ingredients", back_populates="resipes")
 
+    def __repr__(self):
+        return f'<Recipe ID: {self.id}, Name: {self.title}>'
+
 class Ingredient(Base): 
     __tablename__ = "ingredients"
     id = Column(Integer, primary_key=True)
-    title = Column(String(200), nullable=False)
+    title = Column(String(200), nullable=False, unique=True)
 
     resipes = relationship("Recipe", secondary="recipe_ingredients", back_populates="ingredients")
+
+    def __repr__(self):
+        return f'<Ingredient ID: {self.id}, Name: {self.title}>'
